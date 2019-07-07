@@ -11,4 +11,5 @@ require (
 	github.com/rs/cors v1.6.0
 	github.com/spf13/pflag v1.0.3
 	github.com/vektah/gqlparser v1.1.2
+	golang.org/x/tools/gopls v0.1.1 // indirect
 )
