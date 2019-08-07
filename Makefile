@@ -13,7 +13,7 @@ test:
 	go test ./...
 
 build-docker:
-	docker run -it -e GOOS=${GOOS} -e GOARCH=${GOARCH} -v $(shell pwd):/${PROJECT} -w /${PROJECT} golang:${GOVERSION} make build
+	docker run -it -e GOOS=${GOOS} -e GOARCH=${GOARCH} -v $(shell pwd):/${PROJECT} -w /${PROJECT} golang:${GOVERSION} make build run
 
 build:
 	go build -mod vendor -o bin/${PROJECT} .
