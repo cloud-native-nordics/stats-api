@@ -6,7 +6,7 @@ export PROJECT=stats-api
 
 all: build run
 
-run:
+run: clean build
 	./bin/${PROJECT} --v=5 --logtostderr=true
 
 test:
@@ -18,9 +18,8 @@ build-docker:
 build:
 	go build -mod vendor -o bin/${PROJECT} .
 
-generate: 
+generate:
 	(cd api && go run github.com/99designs/gqlgen)
 
 clean:
 	sudo rm bin/${PROJECT}
-	
