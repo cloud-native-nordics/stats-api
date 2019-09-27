@@ -40,6 +40,9 @@ COPY --from=builder /user/group /user/passwd /etc/
 # Import the Certificate-Authority certificates for enabling HTTPS.
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 
+# Import data folder and chown to nobody
+COPY --chown=nobody:nobody --from=builder src/data /data
+
 # Import the compiled executable from the second stage.
 COPY --from=builder /app /app
 

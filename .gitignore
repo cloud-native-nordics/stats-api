@@ -14,3 +14,5 @@ bin/
 
 # Folders
 /.vscode
+
+values.yaml
