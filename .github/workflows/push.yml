@@ -1,0 +1,33 @@
+on: push
+name: Publish container
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Lint
+      uses: ./.github/actions/golang
+      with:
+        args: fmt
+    - name: Test
+      uses: ./.github/actions/golang
+      with:
+        args: test
+    - name: Build
+      uses: ./.github/actions/docker
+      env:
+        DOCKER_IMAGE: ${{ secrets.DOCKER_IMAGE }}
+      with:
+        args: build Dockerfile
+    - name: Login
+      uses: actions/docker/login@master
+      env:
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+    - name: Push
+      uses: ./.github/actions/docker
+      env:
+        DOCKER_IMAGE: ${{ secrets.DOCKER_IMAGE }}
+      with:
+        args: push
