@@ -7,6 +7,8 @@ type MeetupGroup {
     name: String
     city: String
     country: String
+    latitude: Float
+    longitude: Float
     organizers: [Organizer!]!
     meetups: [Meetup!]!
 }
@@ -96,16 +98,16 @@ type Country {
 type Query {
     meetupGroups: [MeetupGroup!]!
     meetupGroup(meetupID: String!): MeetupGroup!
-    
+
     organizers: [Organizer!]!
     organizer(id: String!): Organizer!
-        
+
     companies: [Company!]!
     company(id: String!): Company!
-        
+
     meetups: [Meetup!]!
     meetup(id: Int!): Meetup!
-            
+
     sponsors: [Sponsor!]!
     sponsor(id: String!): Sponsor!
 

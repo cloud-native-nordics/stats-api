@@ -28,7 +28,7 @@ type unmarshalledData struct {
 	meetupGroups   []models.MeetupGroup
 	organizers     []models.Organizer
 	companies      []models.Company
-	meetups        []models.Meetup
+	meetups        map[string]models.Meetup
 	sponsors       []models.Sponsor
 	members        []models.Member
 	meetupSponsors []models.MeetupSponsor
@@ -261,11 +261,12 @@ func (sm *StatsManager) generatePresentations(output *unmarshalledData, presenta
 	}
 }
 
-func (sm *StatsManager) generateMeetups(output *unmarshalledData, meetups []*models.Meetup, meetupGroupID string) {
-	for _, meetup := range meetups {
+func (sm *StatsManager) generateMeetups(output *unmarshalledData, meetups map[string]*models.Meetup, meetupGroupID string) {
+	output.meetups = make(map[string]models.Meetup)
+	for date, meetup := range meetups {
 		meetupToBe := meetup
 		meetupToBe.MeetupGroupID = &meetupGroupID
-		output.meetups = append(output.meetups, *meetupToBe)
+		output.meetups[date] = *meetupToBe
 
 		//Add sponsors
 		sm.generateMeetupSponsors(output, meetup.Sponsors, meetupToBe.ID)
