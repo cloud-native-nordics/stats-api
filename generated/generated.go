@@ -75,6 +75,8 @@ type ComplexityRoot struct {
 	MeetupGroup struct {
 		City       func(childComplexity int) int
 		Country    func(childComplexity int) int
+		Latitude   func(childComplexity int) int
+		Longitude  func(childComplexity int) int
 		MeetupID   func(childComplexity int) int
 		Meetups    func(childComplexity int) int
 		Name       func(childComplexity int) int
@@ -330,6 +332,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.MeetupGroup.Country(childComplexity), true
+
+	case "MeetupGroup.latitude":
+		if e.complexity.MeetupGroup.Latitude == nil {
+			break
+		}
+
+		return e.complexity.MeetupGroup.Latitude(childComplexity), true
+
+	case "MeetupGroup.longitude":
+		if e.complexity.MeetupGroup.Longitude == nil {
+			break
+		}
+
+		return e.complexity.MeetupGroup.Longitude(childComplexity), true
 
 	case "MeetupGroup.meetupID":
 		if e.complexity.MeetupGroup.MeetupID == nil {
@@ -847,6 +863,8 @@ type MeetupGroup {
     country: String
     organizers: [Organizer!]!
     meetups: [Meetup!]!
+    latitude: Float
+    longitude: Float
 }
 
 type Organizer {
@@ -1884,6 +1902,74 @@ func (ec *executionContext) _MeetupGroup_meetups(ctx context.Context, field grap
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
 	return ec.marshalNMeetup2ᚕᚖgithubᚗcomᚋcloudᚑnativeᚑnordicsᚋstatsᚑapiᚋmodelsᚐMeetup(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _MeetupGroup_latitude(ctx context.Context, field graphql.CollectedField, obj *models.MeetupGroup) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "MeetupGroup",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Latitude, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(float64)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalOFloat2float64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _MeetupGroup_longitude(ctx context.Context, field graphql.CollectedField, obj *models.MeetupGroup) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "MeetupGroup",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Longitude, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(float64)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalOFloat2float64(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _MeetupSponsor_id(ctx context.Context, field graphql.CollectedField, obj *models.MeetupSponsor) (ret graphql.Marshaler) {
@@ -5253,6 +5339,10 @@ func (ec *executionContext) _MeetupGroup(ctx context.Context, sel ast.SelectionS
 				}
 				return res
 			})
+		case "latitude":
+			out.Values[i] = ec._MeetupGroup_latitude(ctx, field, obj)
+		case "longitude":
+			out.Values[i] = ec._MeetupGroup_longitude(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -6871,6 +6961,14 @@ func (ec *executionContext) marshalOCountry2ᚖgithubᚗcomᚋcloudᚑnativeᚑn
 		return graphql.Null
 	}
 	return ec._Country(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOFloat2float64(ctx context.Context, v interface{}) (float64, error) {
+	return graphql.UnmarshalFloat(v)
+}
+
+func (ec *executionContext) marshalOFloat2float64(ctx context.Context, sel ast.SelectionSet, v float64) graphql.Marshaler {
+	return graphql.MarshalFloat(v)
 }
 
 func (ec *executionContext) unmarshalOInt2int(ctx context.Context, v interface{}) (int, error) {

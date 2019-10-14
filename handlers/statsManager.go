@@ -279,10 +279,12 @@ func (sm *StatsManager) generateMeetupGroups(output *unmarshalledData, meetupGro
 	meetupGroupsConv := []models.MeetupGroup{}
 	for _, group := range meetupGroups {
 		conv := &models.MeetupGroup{
-			MeetupID: group.MeetupID,
-			Name:     group.Name,
-			City:     group.City,
-			Country:  group.Country,
+			MeetupID:  group.MeetupID,
+			Name:      group.Name,
+			City:      group.City,
+			Country:   group.Country,
+			Longitude: group.Longitude,
+			Latitude:  group.Latitude,
 		}
 		meetupGroupsConv = append(meetupGroupsConv, *conv)
 	}

@@ -5,6 +5,8 @@ type MeetupGroupIn struct {
 	Name       *string            `json:"name"`
 	City       *string            `json:"city"`
 	Country    *string            `json:"country"`
+	Longitude  float64            `json:"longitude"`
+	Latitude   float64            `json:"latitude"`
 	Organizers []*Organizer       `json:"organizers"`
 	Meetups    map[string]*Meetup `json:"meetups"`
 }
@@ -14,6 +16,8 @@ type MeetupGroup struct {
 	Name       *string      `json:"name"`
 	City       *string      `json:"city"`
 	Country    *string      `json:"country"`
+	Longitude  float64      `json:"longitude"`
+	Latitude   float64      `json:"latitude"`
 	Organizers []*Organizer `json:"organizers"`
 	Meetups    []*Meetup    `json:"meetups"`
 }
