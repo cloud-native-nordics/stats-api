@@ -1,5 +1,14 @@
 package models
 
+type MeetupGroupIn struct {
+	MeetupID   string             `json:"meetupID"`
+	Name       *string            `json:"name"`
+	City       *string            `json:"city"`
+	Country    *string            `json:"country"`
+	Organizers []*Organizer       `json:"organizers"`
+	Meetups    map[string]*Meetup `json:"meetups"`
+}
+
 type MeetupGroup struct {
 	MeetupID   string       `json:"meetupID"`
 	Name       *string      `json:"name"`
