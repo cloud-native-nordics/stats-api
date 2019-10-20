@@ -1,33 +1,36 @@
-on: push
 name: Publish container
+on:
+  push:
+    branches:
+    - master
 jobs:
-  lint:
-    name: Lint
+  build:
+    name: Build
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
-    - name: Lint
-      uses: ./.github/actions/golang
+    - name: Set up Go 1.12.7...
+      uses: actions/setup-go@v1
       with:
-        args: fmt
-    - name: Test
-      uses: ./.github/actions/golang
-      with:
-        args: test
-    - name: Build
-      uses: ./.github/actions/docker
-      env:
-        DOCKER_IMAGE: ${{ secrets.DOCKER_IMAGE }}
-      with:
-        args: build Dockerfile
-    - name: Login
-      uses: actions/docker/login@master
+        go-version: 1.12.7
+      id: go
+    - name: Checkout master...
+      uses: actions/checkout@master
+      id: checkout
+    - name: Get dependencies...
+      run: go mod download
+    - name: Run tests...
+      run: go test -v ./...
+    - name: Logging in to container registry...
       env:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-    - name: Push
-      uses: ./.github/actions/docker
+      run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+    - name: Building Docker image...
       env:
         DOCKER_IMAGE: ${{ secrets.DOCKER_IMAGE }}
-      with:
-        args: push
+      run:
+        docker build --rm -t $DOCKER_IMAGE:$(echo ${GITHUB_SHA} | head -c7) .
+    - name: Publishing image...
+      env:
+        DOCKER_IMAGE: ${{ secrets.DOCKER_IMAGE }}
+      run: docker push $DOCKER_IMAGE:$(echo ${GITHUB_SHA} | head -c7)
