@@ -623,6 +623,18 @@
       "name": "neurospace",
       "websiteURL": "https://neurospace.io",
       "logoURL": "https://neurospace.io/img/brand/logo-1500x1500.png"
+    },
+    {
+      "id": "teamblue",
+      "name": "team.blue",
+      "websiteURL": "https://team.blue/",
+      "logoURL": "https://d21buns5ku92am.cloudfront.net/67862/logo/retina-1567508556.png"
+    },
+    {
+      "id": "reaktor",
+      "name": "Reaktor",
+      "websiteURL": "https://www.reaktor.com/",
+      "logoURL": "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDIyLjEuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPgo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IgoJIHZpZXdCb3g9IjAgMCAzNjUuMSA1MDkuNCIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgMzY1LjEgNTA5LjQ7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4KPHBhdGggZD0iTTI0Mi4zLDMwMC4yYzUxLjQtMjUuNCw4Ni40LTY5LjcsODYuNC0xNDAuNkMzMjguNyw2Ny44LDI0NywwLDE1OC42LDBIMTQydjcwLjhIMHY0MzguOGg5Ni41di0xNThoNjAuM2w5My40LDE1Ny43aDExNC45CglMMjQyLjMsMzAwLjJ6IE0xNTUsMjI3LjloLTEzdjM1LjlIOTYuNXYtOTcuMUgxNDJ2LTY2LjRoMTNjNDcuOCwwLDc3LjMsMjkuOSw3Ny4zLDYzLjlDMjMyLjIsMTk4LjIsMjAyLjgsMjI3LjksMTU1LDIyNy45eiIvPgo8L3N2Zz4K"
     }
   ],
   "speakers": [
@@ -1623,6 +1635,23 @@
       "company": "nextfour",
       "github": "lsundman",
       "speakersBureau": ""
+    },
+    {
+      "id": "andydavies",
+      "name": "Andy Davies",
+      "email": "andy@andydote.co.uk",
+      "company": "reaktor",
+      "github": "pondidum",
+      "twitter": "pondidum",
+      "speakersBureau": ""
+    },
+    {
+      "id": "lennartjern",
+      "name": "Lennart Jern",
+      "email": "",
+      "company": "elastisys",
+      "github": "",
+      "speakersBureau": ""
     }
   ],
   "meetupGroups": [
@@ -1808,6 +1837,29 @@
               "speakers": null
             }
           ]
+        },
+        "20191106": {
+          "id": 263745012,
+          "photo": "https://secure.meetupstatic.com/photos/event/8/4/e/e/highres_486394030.jpeg",
+          "name": "#3 Observability II",
+          "date": "2019-11-06T16:30:00Z",
+          "duration": "3h0m0s",
+          "attendees": 33,
+          "address": "Skelagervej 15",
+          "recording": "",
+          "sponsors": null,
+          "presentations": null
+        },
+        "20191211": {
+          "id": 265893647,
+          "photo": "https://secure.meetupstatic.com/photos/event/6/a/6/8/highres_486447240.jpeg",
+          "name": "#4 Istio in production, Prometheus 101 and Gitops",
+          "date": "2019-12-11T16:45:00Z",
+          "duration": "3h15m0s",
+          "address": "Skelagervej 1",
+          "recording": "",
+          "sponsors": null,
+          "presentations": null
         }
       }
     },
@@ -1822,6 +1874,7 @@
         "bestseller": "Meetup",
         "blackbeard": "SpeakerProvider",
         "boligportal": "Meetup",
+        "chaosiq": "SpeakerProvider",
         "cncf": "SpeakerProvider",
         "firstagenda": "Meetup",
         "google": "SpeakerProvider",
@@ -1830,6 +1883,7 @@
         "jysk": "Meetup",
         "lego": "Meetup",
         "lix": "SpeakerProvider",
+        "loodse": "SpeakerProvider",
         "lunar": "Meetup",
         "microsoft": "SpeakerProvider",
         "mobilepay": "Meetup",
@@ -1839,6 +1893,7 @@
         "schneiderelectric": "SpeakerProvider",
         "sparnordbank": "Meetup",
         "systematic": "Meetup",
+        "teamblue": "Meetup",
         "trackunit": "SpeakerProvider",
         "tradeshift": "Meetup",
         "trifork": "Meetup",
@@ -3188,13 +3243,69 @@
           "attendees": 65,
           "address": "Åbogade 15",
           "recording": "",
+          "sponsors": [
+            {
+              "role": "Venue",
+              "company": "praqma"
+            },
+            {
+              "role": "Food",
+              "company": "teamblue"
+            }
+          ],
+          "presentations": [
+            {
+              "duration": "15m0s",
+              "title": "Welcome to Cloud Native Nordics",
+              "slides": "",
+              "speakers": [
+                "kaspernissen"
+              ]
+            },
+            {
+              "duration": "45m0s",
+              "title": "How to be (successful at being) wrong",
+              "slides": "",
+              "speakers": [
+                "russmiles"
+              ]
+            },
+            {
+              "duration": "45m0s",
+              "title": "Building KubeOne: yet another Kubernetes cluster management tool",
+              "slides": "",
+              "speakers": [
+                "alexandersowitzki"
+              ]
+            }
+          ]
+        },
+        "20191114": {
+          "id": 265871741,
+          "photo": "https://secure.meetupstatic.com/photos/event/2/8/2/9/highres_486190281.jpeg",
+          "name": "Istio in Production \u0026 Storage in k8s",
+          "date": "2019-11-14T17:00:00Z",
+          "duration": "3h0m0s",
+          "address": "Højvangen 4",
+          "recording": "",
+          "sponsors": null,
+          "presentations": null
+        },
+        "20191218": {
+          "id": 266225252,
+          "photo": "https://secure.meetupstatic.com/photos/event/7/3/4/1/highres_486569505.jpeg",
+          "name": "Happy Holidays Edition with GitOps and Exploiting the winds of change",
+          "date": "2019-12-18T16:30:00Z",
+          "duration": "3h30m0s",
+          "address": "Finlandsgade 28",
+          "recording": "",
           "sponsors": null,
           "presentations": null
         }
       }
     },
     {
-      "photo": "https://secure.meetupstatic.com/photos/event/2/4/0/0/highres_485769216.jpeg",
+      "photo": "https://secure.meetupstatic.com/photos/event/c/a/5/f/highres_486471807.jpeg",
       "name": "DevOps and Cloud Native Bergen",
       "city": "Bergen",
       "country": "norway",
@@ -3441,6 +3552,17 @@
               ]
             }
           ]
+        },
+        "20200123": {
+          "id": 266338983,
+          "photo": "https://secure.meetupstatic.com/photos/event/2/e/d/c/highres_486491996.jpeg",
+          "name": "Cloud Native Nordics Tour",
+          "date": "2020-01-23T17:30:00Z",
+          "duration": "3h0m0s",
+          "address": "Folke Bernadottes vei 40",
+          "recording": "",
+          "sponsors": null,
+          "presentations": null
         }
       }
     },
@@ -3904,6 +4026,17 @@
           "recording": "",
           "sponsors": null,
           "presentations": null
+        },
+        "20191210": {
+          "id": 266225732,
+          "photo": "https://secure.meetupstatic.com/photos/event/8/8/6/2/highres_486394914.jpeg",
+          "name": "GitOps \u0026 Serverless",
+          "date": "2019-12-10T17:00:00Z",
+          "duration": "3h0m0s",
+          "address": "Kongens Nytorv 18",
+          "recording": "",
+          "sponsors": null,
+          "presentations": null
         }
       }
     },
@@ -4093,6 +4226,16 @@
           "recording": "",
           "sponsors": null,
           "presentations": null
+        },
+        "20191204": {
+          "id": 265686037,
+          "name": "Local Kubernetes - more details closer to event",
+          "date": "2019-12-04T18:00:00Z",
+          "duration": "3h0m0s",
+          "address": "",
+          "recording": "",
+          "sponsors": null,
+          "presentations": null
         }
       }
     },
@@ -4101,7 +4244,7 @@
       "name": "Kubernetes and CNCF Finland Meetup",
       "city": "Helsinki",
       "country": "finland",
-      "description": "\u003cp\u003eCloud Native tech and Kubernetes goes Helsinki! Cloud Native and Kubernetes Helsinki is the official Cloud Native Computing Foundation Meetup group about the technologies hosted under CNCF umbrella: \u003cbr\u003e- Kubernetes \u003cbr\u003e- Prometheus \u003cbr\u003e- Opentracing \u003cbr\u003e- Fluentd \u003cbr\u003e- CoreDNS \u003cbr\u003e- linkerd \u003cbr\u003e- containerd \u003cbr\u003e- rkt \u003cbr\u003e- gRPC \u003cbr\u003e- CNI\u003c/p\u003e\n\u003cp\u003eWe host talks from anyone doing cool things with Kubernetes, and the other CNCF technologies, including companies using them in production or vendors who are pushing the boundaries of what the cloud native techs can do.\u003c/p\u003e\n\u003cp\u003ePresentations will be focused on introduction slides, guides, workshops, adoption stories and demos, but not sales pitches. The meetup will be organized in an open and democratic way, where anyone that wants to help out organizing or speaking will be truly welcome.\u003c/p\u003e\n\u003cp\u003eTo become an organizer or speaker, please reach out to us!\u003c/p\u003e\n\u003cp\u003e This meetup's official language is English; the conversations and presentations will be in English.\u003c/p\u003e\n\u003cp\u003eFor more information, check out the blog at \u003ca href=\"https://kubernetesfinland.com\" class=\"linkified\"\u003ehttps://kubernetesfinland.com\u003c/a\u003e\u003c/p\u003e",
+      "description": "\u003cp\u003eCloud Native tech and Kubernetes goes Helsinki! Cloud Native and Kubernetes Helsinki is the official Cloud Native Computing Foundation Meetup group about the technologies hosted under CNCF umbrella: \u0026lt;br\u0026gt;- Kubernetes \u0026lt;br\u0026gt;- Prometheus \u0026lt;br\u0026gt;- Opentracing \u0026lt;br\u0026gt;- Fluentd \u0026lt;br\u0026gt;- CoreDNS \u0026lt;br\u0026gt;- linkerd \u0026lt;br\u0026gt;- containerd \u0026lt;br\u0026gt;- rkt \u0026lt;br\u0026gt;- gRPC \u0026lt;br\u0026gt;- CNI\u003c/p\u003e \n\u003cp\u003eWe host talks from anyone doing cool things with Kubernetes, and the other CNCF technologies, including companies using them in production or vendors who are pushing the boundaries of what the cloud native techs can do.\u003c/p\u003e \n\u003cp\u003ePresentations will be focused on introduction slides, guides, workshops, adoption stories and demos, but not sales pitches. The meetup will be organized in an open and democratic way, where anyone that wants to help out organizing or speaking will be truly welcome.\u003c/p\u003e \n\u003cp\u003eTo become an organizer or speaker, please reach out to us!\u003c/p\u003e \n\u003cp\u003eThis meetup's official language is English; the conversations and presentations will be in English.\u003c/p\u003e \n\u003cp\u003eFor more information, check out the blog at \u003ca href=\"https://kubernetesfinland.com\" class=\"linkified\"\u003ehttps://kubernetesfinland.com\u003c/a\u003e\u003c/p\u003e",
       "sponsorTiers": {
         "accenture": "Meetup",
         "agileo": "EcosystemMember",
@@ -5013,7 +5156,7 @@
             {
               "duration": "15m0s",
               "title": "Updates from the Cloud Native Nordics Community",
-              "slides": "",
+              "slides": "https://speakerdeck.com/luxas/kubernetes-and-cncf-meetup-helsinki-october-2019",
               "speakers": [
                 "luxas"
               ]
@@ -5189,6 +5332,16 @@
           "date": "2018-11-29T17:00:00Z",
           "duration": "2h0m0s",
           "attendees": 59,
+          "address": "Pilestredet 56",
+          "recording": "",
+          "sponsors": null,
+          "presentations": null
+        },
+        "20191113": {
+          "id": 265737238,
+          "name": "Storage Operator in Kubernetes - Getting your Feet Wet",
+          "date": "2019-11-13T17:15:00Z",
+          "duration": "2h0m0s",
           "address": "Pilestredet 56",
           "recording": "",
           "sponsors": null,
@@ -5945,12 +6098,23 @@
               "duration": "3h30m0s",
               "delay": "15m0s",
               "title": "Kubernetes 101 Hands-On Workshop",
-              "slides": "",
+              "slides": "https://speakerdeck.com/luxas/kubernetes-finland-workshop-october-2019",
               "speakers": [
                 "luxas"
               ]
             }
           ]
+        },
+        "20191204": {
+          "id": 266223857,
+          "photo": "https://secure.meetupstatic.com/photos/event/8/2/6/b/highres_486453387.jpeg",
+          "name": "December Kubernetes Meetup in Tampere",
+          "date": "2019-12-04T17:00:00Z",
+          "duration": "3h0m0s",
+          "address": "Hatanpään valtatie 30",
+          "recording": "",
+          "sponsors": null,
+          "presentations": null
         }
       }
     },
@@ -5962,9 +6126,11 @@
       "description": "\u003cp\u003eCloud Native tech and Kubernetes goes Turku! Cloud Native and Kubernetes Turku is the official Cloud Native Computing Foundation Meetup group about the technologies hosted under CNCF umbrella. Furthermore, we're part of the Cloud Native Nordics family, an umbrella for the Cloud Native meetups in the Nordic countries. Join our Slack here: \u003ca href=\"https://cloudnativenordics.com\" class=\"linkified\"\u003ehttps://cloudnativenordics.com\u003c/a\u003e\u003c/p\u003e \n\u003cp\u003eWe host talks from anyone doing cool things with Kubernetes, and the other CNCF technologies, including companies using them in production or vendors who are pushing the boundaries of what the cloud native techs can do.\u003c/p\u003e \n\u003cp\u003ePresentations will be focused on introduction slides, guides, workshops, adoption stories and demos, but not sales pitches. The meetup will be organized in an open and democratic way, where anyone that wants to help out organizing or speaking will be truly welcome.\u003c/p\u003e \n\u003cp\u003eTo become a venue sponsor or speaker, please reach out to us!\u003c/p\u003e \n\u003cp\u003eThis meetup's official language is English; the conversations and presentations will be in English.\u003c/p\u003e \n\u003cp\u003eFor more information, check out \u003ca href=\"https://cloudnativenordics.com\" class=\"linkified\"\u003ehttps://cloudnativenordics.com\u003c/a\u003e / \u003ca href=\"https://github.com/cloud-native-nordics\" class=\"linkified\"\u003ehttps://github.com/cloud-native-nordics\u003c/a\u003e\u003c/p\u003e",
       "sponsorTiers": {
         "cncf": "Meetup",
+        "elastisys": "SpeakerProvider",
         "luxaslabs": "Meetup",
         "microsoft": "SpeakerProvider",
         "nextfour": "Meetup",
+        "reaktor": "Meetup",
         "semantum": "Meetup",
         "walkbase": "Meetup"
       },
@@ -6031,7 +6197,7 @@
               "duration": "30m0s",
               "delay": "5m0s",
               "title": "Introduction to the cloud native world",
-              "slides": "",
+              "slides": "https://speakerdeck.com/luxas/kubernetes-and-cncf-meetup-turku-october-2019",
               "speakers": [
                 "luxas"
               ]
@@ -6039,13 +6205,13 @@
             {
               "duration": "30m0s",
               "title": "Networking, food, drinks",
-              "slides": "",
+              "slides": "https://speakerdeck.com/luxas/intro-to-the-cloud-native-world-of-kubernetes-october-2019",
               "speakers": null
             },
             {
               "duration": "30m0s",
               "title": "Managing Kubernetes clusters easily with Rancher",
-              "slides": "",
+              "slides": "https://www.slideshare.net/AntonLindholm2/managing-kubernetes-clusters-easily-with-rancher",
               "speakers": [
                 "antonlindholm"
               ]
@@ -6076,8 +6242,72 @@
           "duration": "3h0m0s",
           "address": "Linnankatu 16",
           "recording": "",
-          "sponsors": null,
-          "presentations": null
+          "sponsors": [
+            {
+              "role": "Venue",
+              "company": "reaktor"
+            },
+            {
+              "role": "Other",
+              "company": "luxaslabs"
+            },
+            {
+              "role": "Other",
+              "company": "cncf"
+            }
+          ],
+          "presentations": [
+            {
+              "duration": "10m0s",
+              "title": "Arrive at the venue, sit down and network with others",
+              "slides": "",
+              "speakers": null
+            },
+            {
+              "duration": "5m0s",
+              "title": "Introductionary words from the venue sponsor for this time, Reaktor!",
+              "slides": "",
+              "speakers": null
+            },
+            {
+              "duration": "30m0s",
+              "title": "Intro to kubernetes objects",
+              "slides": "",
+              "speakers": [
+                "antonlindholm"
+              ]
+            },
+            {
+              "duration": "30m0s",
+              "delay": "5m0s",
+              "title": "Nomad: Kubernetes Without the Complexity",
+              "slides": "",
+              "speakers": [
+                "andydavies"
+              ]
+            },
+            {
+              "duration": "30m0s",
+              "title": "Networking, food, drinks",
+              "slides": "",
+              "speakers": null
+            },
+            {
+              "duration": "30m0s",
+              "title": "RBAC, NetworkPolicies and PodSecurityPolicies",
+              "slides": "",
+              "speakers": [
+                "lennartjern"
+              ]
+            },
+            {
+              "duration": "15m0s",
+              "delay": "5m0s",
+              "title": "Networking",
+              "slides": "",
+              "speakers": null
+            }
+          ]
         }
       }
     },
@@ -6213,6 +6443,17 @@
               ]
             }
           ]
+        },
+        "20191125": {
+          "id": 266254756,
+          "photo": "https://secure.meetupstatic.com/photos/event/1/3/8/8/highres_486425000.jpeg",
+          "name": "KubeCon recap \u0026 Istio",
+          "date": "2019-11-25T17:00:00Z",
+          "duration": "2h0m0s",
+          "address": "Kuratorvägen 2A",
+          "recording": "",
+          "sponsors": null,
+          "presentations": null
         }
       }
     }
