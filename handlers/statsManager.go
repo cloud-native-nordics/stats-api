@@ -4,11 +4,12 @@ import (
 	"encoding/json"
 	"errors"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"path/filepath"
-
-	"io/ioutil"
+	"sync"
+	"time"
 
 	"github.com/cloud-native-nordics/stats-api/models"
 	"github.com/golang/glog"
@@ -21,6 +22,9 @@ type StatsManager struct {
 	filepath string
 	URL      string
 	db       *memdb.MemDB
+	schema   *memdb.DBSchema
+	dbMux    *sync.Mutex
+	ticker   *time.Ticker
 }
 
 type unmarshalledData struct {
@@ -51,32 +55,60 @@ type jsonStructure struct {
 
 //NewStatsManager fetches the stats.json file, marshals to structs, creates in-mem db
 //and then returns a reference to the in-mem db.
-func NewStatsManager(URL string) *memdb.MemDB {
+func NewStatsManager(URL string, refreshInterval time.Duration) *StatsManager {
 	sm := &StatsManager{
 		URL:      URL,
 		filepath: "./data/stats.json",
+		ticker:   time.NewTicker(refreshInterval),
+		dbMux:    &sync.Mutex{},
+		schema:   createDatabaseSchema(),
 	}
-	schema := createDatabaseSchema()
+	sm.populateDBFromURL()
+	sm.startThread()
 
-	err := sm.fetchStats()
+	return sm
+}
 
-	if err != nil {
+func (sm *StatsManager) GetDB() *memdb.MemDB {
+	sm.dbMux.Lock()
+	defer sm.dbMux.Unlock()
+
+	return sm.db
+}
+
+func (sm *StatsManager) setDB(newDB *memdb.MemDB) {
+	sm.dbMux.Lock()
+	defer sm.dbMux.Unlock()
+
+	sm.db = newDB
+}
+
+func (sm *StatsManager) startThread() {
+	glog.V(5).Info("Starting refresh thread!")
+	go func() {
+		select {
+		case <-sm.ticker.C:
+			glog.V(5).Info("Got ticker notification, refreshing DB")
+			sm.populateDBFromURL()
+		}
+	}()
+}
+
+func (sm *StatsManager) populateDBFromURL() {
+	if err := sm.fetchStats(); err != nil {
 		glog.Fatalf("Fatal could not fetch stats.json: %s", err)
 	}
 
 	data, err := sm.unmarshallData()
-
 	if err != nil {
 		glog.Fatalf("Fatal could not unmarshall stats.json: %s", err)
 	}
 
-	db, err := sm.populateDatabase(schema, data)
-
-	if err != nil {
+	if err := sm.populateDatabase(sm.schema, data); err != nil {
 		glog.Fatalf("Fatal could not populate database: %s", err)
 	}
 
-	return db
+	glog.V(5).Info("Database populated successfully!")
 }
 
 //fetchStats downloads the stats.json from the supplied URL to a local file.
@@ -318,12 +350,12 @@ func (sm *StatsManager) generatePresentations(output *unmarshalledData, presenta
 }
 
 //Create and populate database
-func (sm *StatsManager) populateDatabase(schema *memdb.DBSchema, data *unmarshalledData) (*memdb.MemDB, error) {
+func (sm *StatsManager) populateDatabase(schema *memdb.DBSchema, data *unmarshalledData) error {
 	// Create a new data base
 	glog.V(5).Info("Creating database")
 	db, err := memdb.NewMemDB(schema)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	// Create a write transaction
@@ -333,7 +365,7 @@ func (sm *StatsManager) populateDatabase(schema *memdb.DBSchema, data *unmarshal
 	glog.V(5).Infof("Inserting %d Companies", len(data.companies))
 	for _, company := range data.companies {
 		if err := txn.Insert("company", company); err != nil {
-			return nil, err
+			return err
 		}
 	}
 
@@ -341,7 +373,7 @@ func (sm *StatsManager) populateDatabase(schema *memdb.DBSchema, data *unmarshal
 	glog.V(5).Infof("Inserting %d Speakers", len(data.speakers))
 	for _, speaker := range data.speakers {
 		if err := txn.Insert("speaker", speaker); err != nil {
-			return nil, err
+			return err
 		}
 	}
 
@@ -349,7 +381,7 @@ func (sm *StatsManager) populateDatabase(schema *memdb.DBSchema, data *unmarshal
 	glog.V(5).Infof("Inserting %d SpeakerToCompany Relations", len(data.speakerToCompany))
 	for _, relation := range data.speakerToCompany {
 		if err := txn.Insert("speakerToCompany", relation); err != nil {
-			return nil, err
+			return err
 		}
 	}
 
@@ -357,7 +389,7 @@ func (sm *StatsManager) populateDatabase(schema *memdb.DBSchema, data *unmarshal
 	glog.V(5).Infof("Inserting %d Meetup Groups", len(data.meetupGroups))
 	for _, mg := range data.meetupGroups {
 		if err := txn.Insert("meetupGroup", mg); err != nil {
-			return nil, err
+			return err
 		}
 	}
 
@@ -365,7 +397,7 @@ func (sm *StatsManager) populateDatabase(schema *memdb.DBSchema, data *unmarshal
 	glog.V(5).Infof("Inserting %d Sponsor Tiers", len(data.sponsorTiers))
 	for _, sponsorTier := range data.sponsorTiers {
 		if err := txn.Insert("sponsorTier", sponsorTier); err != nil {
-			return nil, err
+			return err
 		}
 	}
 
@@ -373,7 +405,7 @@ func (sm *StatsManager) populateDatabase(schema *memdb.DBSchema, data *unmarshal
 	glog.V(5).Infof("Inserting %d SponsorTierToMeetupGroup Relations", len(data.sponsorTierToMeetupGroup))
 	for _, relation := range data.sponsorTierToMeetupGroup {
 		if err := txn.Insert("sponsorTierToMeetupGroup", relation); err != nil {
-			return nil, err
+			return err
 		}
 	}
 
@@ -381,7 +413,7 @@ func (sm *StatsManager) populateDatabase(schema *memdb.DBSchema, data *unmarshal
 	glog.V(5).Infof("Inserting %d SponsorTierToCompany Relations", len(data.sponsorTierToCompany))
 	for _, relation := range data.sponsorTierToCompany {
 		if err := txn.Insert("sponsorTierToCompany", relation); err != nil {
-			return nil, err
+			return err
 		}
 	}
 
@@ -389,7 +421,7 @@ func (sm *StatsManager) populateDatabase(schema *memdb.DBSchema, data *unmarshal
 	glog.V(5).Infof("Inserting %d SponsorToCompany Relations", len(data.sponsorToCompany))
 	for _, relation := range data.sponsorToCompany {
 		if err := txn.Insert("sponsorToCompany", relation); err != nil {
-			return nil, err
+			return err
 		}
 	}
 
@@ -397,7 +429,7 @@ func (sm *StatsManager) populateDatabase(schema *memdb.DBSchema, data *unmarshal
 	glog.V(5).Infof("Inserting %d MeetupGroupToOrganizer Relations", len(data.meetupGroupToOrganizer))
 	for _, relation := range data.meetupGroupToOrganizer {
 		if err := txn.Insert("meetupGroupToOrganizer", relation); err != nil {
-			return nil, err
+			return err
 		}
 	}
 
@@ -405,7 +437,7 @@ func (sm *StatsManager) populateDatabase(schema *memdb.DBSchema, data *unmarshal
 	glog.V(5).Infof("Inserting %d MeetupGroupToEcosystemMember Relations", len(data.meetupGroupToEcosystemMember))
 	for _, relation := range data.meetupGroupToEcosystemMember {
 		if err := txn.Insert("meetupGroupToEcosystemMember", relation); err != nil {
-			return nil, err
+			return err
 		}
 	}
 
@@ -413,7 +445,7 @@ func (sm *StatsManager) populateDatabase(schema *memdb.DBSchema, data *unmarshal
 	glog.V(5).Infof("Inserting %d Meetups", len(data.meetups))
 	for _, meetup := range data.meetups {
 		if err := txn.Insert("meetup", meetup); err != nil {
-			return nil, err
+			return err
 		}
 	}
 
@@ -421,7 +453,7 @@ func (sm *StatsManager) populateDatabase(schema *memdb.DBSchema, data *unmarshal
 	glog.V(5).Infof("Inserting %d MeetupGroupToMeetup Relations", len(data.meetupGroupToMeetup))
 	for _, relation := range data.meetupGroupToMeetup {
 		if err := txn.Insert("meetupGroupToMeetup", relation); err != nil {
-			return nil, err
+			return err
 		}
 	}
 
@@ -429,7 +461,7 @@ func (sm *StatsManager) populateDatabase(schema *memdb.DBSchema, data *unmarshal
 	glog.V(5).Infof("Inserting %d Sponsors", len(data.sponsors))
 	for _, sponsor := range data.sponsors {
 		if err := txn.Insert("sponsor", sponsor); err != nil {
-			return nil, err
+			return err
 		}
 	}
 
@@ -437,7 +469,7 @@ func (sm *StatsManager) populateDatabase(schema *memdb.DBSchema, data *unmarshal
 	glog.V(5).Infof("Inserting %d MeetupToSponsor Relations", len(data.meetupToSponsor))
 	for _, relation := range data.meetupToSponsor {
 		if err := txn.Insert("meetupToSponsor", relation); err != nil {
-			return nil, err
+			return err
 		}
 	}
 
@@ -445,7 +477,7 @@ func (sm *StatsManager) populateDatabase(schema *memdb.DBSchema, data *unmarshal
 	glog.V(5).Infof("Inserting %d Presentations", len(data.presentations))
 	for _, presentation := range data.presentations {
 		if err := txn.Insert("presentation", presentation); err != nil {
-			return nil, err
+			return err
 		}
 	}
 
@@ -453,7 +485,7 @@ func (sm *StatsManager) populateDatabase(schema *memdb.DBSchema, data *unmarshal
 	glog.V(5).Infof("Inserting %d MeetupToPresentation Relations", len(data.meetupToPresentation))
 	for _, relation := range data.meetupToPresentation {
 		if err := txn.Insert("meetupToPresentation", relation); err != nil {
-			return nil, err
+			return err
 		}
 	}
 
@@ -461,11 +493,12 @@ func (sm *StatsManager) populateDatabase(schema *memdb.DBSchema, data *unmarshal
 	glog.V(5).Infof("Inserting %d PresentationToSpeaker Relations", len(data.presentationToSpeaker))
 	for _, relation := range data.presentationToSpeaker {
 		if err := txn.Insert("presentationToSpeaker", relation); err != nil {
-			return nil, err
+			return err
 		}
 	}
 	// Commit the transaction
 	txn.Commit()
 
-	return db, nil
+	sm.setDB(db)
+	return nil
 }

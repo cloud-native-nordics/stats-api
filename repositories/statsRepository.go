@@ -5,15 +5,19 @@ import (
 	"github.com/hashicorp/go-memdb"
 )
 
+type DBInterface interface {
+	GetDB() *memdb.MemDB
+}
+
 //StatsRepository is used to query the in-mem database
 type StatsRepository struct {
-	db *memdb.MemDB
+	sm DBInterface
 }
 
 //NewStatsRepository returns a new Stats Repository to be used for fetching data from the in-mem database
-func NewStatsRepository(db *memdb.MemDB) *StatsRepository {
+func NewStatsRepository(sm DBInterface) *StatsRepository {
 	return &StatsRepository{
-		db: db,
+		sm: sm,
 	}
 }
 
@@ -21,7 +25,7 @@ func NewStatsRepository(db *memdb.MemDB) *StatsRepository {
 func (sr *StatsRepository) GetAllMeetupGroups() ([]*models.MeetupGroup, error) {
 	output := []*models.MeetupGroup{}
 	// Create read-only transaction
-	txn := sr.db.Txn(false)
+	txn := sr.sm.GetDB().Txn(false)
 	defer txn.Abort()
 
 	// List all meetup groups
@@ -40,7 +44,7 @@ func (sr *StatsRepository) GetAllMeetupGroups() ([]*models.MeetupGroup, error) {
 
 func (sr *StatsRepository) GetMeetupGroup(id string) (*models.MeetupGroup, error) {
 	// Create read-only transaction
-	txn := sr.db.Txn(false)
+	txn := sr.sm.GetDB().Txn(false)
 	defer txn.Abort()
 
 	//Get meetup group by id
@@ -55,7 +59,7 @@ func (sr *StatsRepository) GetMeetupGroup(id string) (*models.MeetupGroup, error
 
 func (sr *StatsRepository) GetMeetupGroupForMeetup(id int) (*models.MeetupGroup, error) {
 	// Create read-only transaction
-	txn := sr.db.Txn(false)
+	txn := sr.sm.GetDB().Txn(false)
 	defer txn.Abort()
 
 	//Get meetup group by id
@@ -77,7 +81,7 @@ func (sr *StatsRepository) GetMeetupGroupForMeetup(id int) (*models.MeetupGroup,
 func (sr *StatsRepository) GetSponsorTiersForMeetupGroup(id string) ([]*models.SponsorTier, error) {
 	output := []*models.SponsorTier{}
 	// Create read-only transaction
-	txn := sr.db.Txn(false)
+	txn := sr.sm.GetDB().Txn(false)
 	defer txn.Abort()
 
 	// List all sponsor tier relations for meetup group
@@ -102,7 +106,7 @@ func (sr *StatsRepository) GetSponsorTiersForMeetupGroup(id string) ([]*models.S
 func (sr *StatsRepository) GetMeetupGroupsForSponsorTier(id string) ([]*models.MeetupGroup, error) {
 	output := []*models.MeetupGroup{}
 	// Create read-only transaction
-	txn := sr.db.Txn(false)
+	txn := sr.sm.GetDB().Txn(false)
 	defer txn.Abort()
 
 	// List all sponsor tier relations for meetup group
@@ -128,7 +132,7 @@ func (sr *StatsRepository) GetMeetupGroupsForSponsorTier(id string) ([]*models.M
 func (sr *StatsRepository) GetOrganizersForMeetupGroup(id string) ([]*models.Speaker, error) {
 	output := []*models.Speaker{}
 	// Create read-only transaction
-	txn := sr.db.Txn(false)
+	txn := sr.sm.GetDB().Txn(false)
 	defer txn.Abort()
 
 	relations, err := txn.Get("meetupGroupToOrganizer", "meetupGroupID", id)
@@ -152,7 +156,7 @@ func (sr *StatsRepository) GetOrganizersForMeetupGroup(id string) ([]*models.Spe
 func (sr *StatsRepository) GetEcosystemMembersForMeetupGroup(id string) ([]*models.Company, error) {
 	output := []*models.Company{}
 	// Create read-only transaction
-	txn := sr.db.Txn(false)
+	txn := sr.sm.GetDB().Txn(false)
 	defer txn.Abort()
 
 	relations, err := txn.Get("meetupGroupToEcosystemMember", "meetupGroupID", id)
@@ -176,7 +180,7 @@ func (sr *StatsRepository) GetEcosystemMembersForMeetupGroup(id string) ([]*mode
 func (sr *StatsRepository) GetMeetupsForMeetupGroup(id string) ([]*models.Meetup, error) {
 	output := []*models.Meetup{}
 	// Create read-only transaction
-	txn := sr.db.Txn(false)
+	txn := sr.sm.GetDB().Txn(false)
 	defer txn.Abort()
 
 	relations, err := txn.Get("meetupGroupToMeetup", "meetupGroupID", id)
@@ -200,7 +204,7 @@ func (sr *StatsRepository) GetMeetupsForMeetupGroup(id string) ([]*models.Meetup
 // ### Sponsor Tier ###
 func (sr *StatsRepository) GetCompanyForSponsorTier(id string) (*models.Company, error) {
 	// Create read-only transaction
-	txn := sr.db.Txn(false)
+	txn := sr.sm.GetDB().Txn(false)
 	defer txn.Abort()
 
 	relations, err := txn.First("sponsorTierToCompany", "sponsorTierID", id)
@@ -222,7 +226,7 @@ func (sr *StatsRepository) GetCompanyForSponsorTier(id string) (*models.Company,
 func (sr *StatsRepository) GetAllCompanies() ([]*models.Company, error) {
 	output := []*models.Company{}
 	// Create read-only transaction
-	txn := sr.db.Txn(false)
+	txn := sr.sm.GetDB().Txn(false)
 	defer txn.Abort()
 
 	// List all companies
@@ -241,7 +245,7 @@ func (sr *StatsRepository) GetAllCompanies() ([]*models.Company, error) {
 
 func (sr *StatsRepository) GetCompany(id string) (*models.Company, error) {
 	// Create read-only transaction
-	txn := sr.db.Txn(false)
+	txn := sr.sm.GetDB().Txn(false)
 	defer txn.Abort()
 
 	//Get company by id
@@ -257,7 +261,7 @@ func (sr *StatsRepository) GetCompany(id string) (*models.Company, error) {
 func (sr *StatsRepository) GetCountriesForCompany(id string) ([]*string, error) {
 	var output []*string
 	// Create read-only transaction
-	txn := sr.db.Txn(false)
+	txn := sr.sm.GetDB().Txn(false)
 	defer txn.Abort()
 
 	sponsorTierRelations, err := txn.Get("sponsorTierToCompany", "companyID", id)
@@ -294,7 +298,7 @@ func (sr *StatsRepository) GetCountriesForCompany(id string) ([]*string, error) 
 func (sr *StatsRepository) GetSponsorTiersForCompany(id string) ([]*models.SponsorTier, error) {
 	output := []*models.SponsorTier{}
 	// Create read-only transaction
-	txn := sr.db.Txn(false)
+	txn := sr.sm.GetDB().Txn(false)
 	defer txn.Abort()
 
 	sponsorTierRelations, err := txn.Get("sponsorTierToCompany", "companyID", id)
@@ -320,7 +324,7 @@ func (sr *StatsRepository) GetSponsorTiersForCompany(id string) ([]*models.Spons
 func (sr *StatsRepository) GetSpeakersForCompany(id string) ([]*models.Speaker, error) {
 	output := []*models.Speaker{}
 	// Create read-only transaction
-	txn := sr.db.Txn(false)
+	txn := sr.sm.GetDB().Txn(false)
 	defer txn.Abort()
 
 	speakerRelations, err := txn.Get("speakerToCompany", "companyID", id)
@@ -347,7 +351,7 @@ func (sr *StatsRepository) GetSpeakersForCompany(id string) ([]*models.Speaker, 
 func (sr *StatsRepository) GetAllMeetups() ([]*models.Meetup, error) {
 	output := []*models.Meetup{}
 	// Create read-only transaction
-	txn := sr.db.Txn(false)
+	txn := sr.sm.GetDB().Txn(false)
 	defer txn.Abort()
 
 	// List all meetups
@@ -366,7 +370,7 @@ func (sr *StatsRepository) GetAllMeetups() ([]*models.Meetup, error) {
 
 func (sr *StatsRepository) GetMeetup(id int) (*models.Meetup, error) {
 	// Create read-only transaction
-	txn := sr.db.Txn(false)
+	txn := sr.sm.GetDB().Txn(false)
 	defer txn.Abort()
 
 	//Get meetup by id
@@ -382,7 +386,7 @@ func (sr *StatsRepository) GetMeetup(id int) (*models.Meetup, error) {
 func (sr *StatsRepository) GetSponsorsForMeetup(id int) ([]*models.Sponsor, error) {
 	output := []*models.Sponsor{}
 	// Create read-only transaction
-	txn := sr.db.Txn(false)
+	txn := sr.sm.GetDB().Txn(false)
 	defer txn.Abort()
 
 	relations, err := txn.Get("meetupToSponsor", "meetupID", id)
@@ -406,7 +410,7 @@ func (sr *StatsRepository) GetSponsorsForMeetup(id int) ([]*models.Sponsor, erro
 func (sr *StatsRepository) GetPresentationsForMeetup(id int) ([]*models.Presentation, error) {
 	output := []*models.Presentation{}
 	// Create read-only transaction
-	txn := sr.db.Txn(false)
+	txn := sr.sm.GetDB().Txn(false)
 	defer txn.Abort()
 
 	relations, err := txn.Get("meetupToPresentation", "meetupID", id)
@@ -431,7 +435,7 @@ func (sr *StatsRepository) GetPresentationsForMeetup(id int) ([]*models.Presenta
 func (sr *StatsRepository) GetAllPresentations() ([]*models.Presentation, error) {
 	output := []*models.Presentation{}
 	// Create read-only transaction
-	txn := sr.db.Txn(false)
+	txn := sr.sm.GetDB().Txn(false)
 	defer txn.Abort()
 
 	// List all presentations
@@ -450,7 +454,7 @@ func (sr *StatsRepository) GetAllPresentations() ([]*models.Presentation, error)
 
 func (sr *StatsRepository) GetPresentation(id string) (*models.Presentation, error) {
 	// Create read-only transaction
-	txn := sr.db.Txn(false)
+	txn := sr.sm.GetDB().Txn(false)
 	defer txn.Abort()
 
 	//Get presentation by id
@@ -466,7 +470,7 @@ func (sr *StatsRepository) GetPresentation(id string) (*models.Presentation, err
 func (sr *StatsRepository) GetSpeakersForPresentation(id string) ([]*models.Speaker, error) {
 	output := []*models.Speaker{}
 	// Create read-only transaction
-	txn := sr.db.Txn(false)
+	txn := sr.sm.GetDB().Txn(false)
 	defer txn.Abort()
 
 	relations, err := txn.Get("presentationToSpeaker", "presentationID", id)
@@ -489,7 +493,7 @@ func (sr *StatsRepository) GetSpeakersForPresentation(id string) ([]*models.Spea
 
 func (sr *StatsRepository) GetMeetupForPresentation(id string) (*models.Meetup, error) {
 	// Create read-only transaction
-	txn := sr.db.Txn(false)
+	txn := sr.sm.GetDB().Txn(false)
 	defer txn.Abort()
 
 	relations, err := txn.First("meetupToPresentation", "presentationID", id)
@@ -511,7 +515,7 @@ func (sr *StatsRepository) GetMeetupForPresentation(id string) (*models.Meetup, 
 func (sr *StatsRepository) GetAllSpeakers() ([]*models.Speaker, error) {
 	output := []*models.Speaker{}
 	// Create read-only transaction
-	txn := sr.db.Txn(false)
+	txn := sr.sm.GetDB().Txn(false)
 	defer txn.Abort()
 
 	// List all speakers
@@ -530,7 +534,7 @@ func (sr *StatsRepository) GetAllSpeakers() ([]*models.Speaker, error) {
 
 func (sr *StatsRepository) GetSpeaker(id string) (*models.Speaker, error) {
 	// Create read-only transaction
-	txn := sr.db.Txn(false)
+	txn := sr.sm.GetDB().Txn(false)
 	defer txn.Abort()
 
 	//Get speaker by id
@@ -545,7 +549,7 @@ func (sr *StatsRepository) GetSpeaker(id string) (*models.Speaker, error) {
 
 func (sr *StatsRepository) GetCompanyForSpeaker(id string) (*models.Company, error) {
 	// Create read-only transaction
-	txn := sr.db.Txn(false)
+	txn := sr.sm.GetDB().Txn(false)
 	defer txn.Abort()
 
 	relations, err := txn.First("speakerToCompany", "speakerID", id)
@@ -569,7 +573,7 @@ func (sr *StatsRepository) GetCompanyForSpeaker(id string) (*models.Company, err
 func (sr *StatsRepository) GetCountriesForSpeaker(id string) ([]*string, error) {
 	var output []*string
 	// Create read-only transaction
-	txn := sr.db.Txn(false)
+	txn := sr.sm.GetDB().Txn(false)
 	defer txn.Abort()
 
 	presentationRelations, err := txn.Get("presentationToSpeaker", "speakerID", id)
@@ -614,7 +618,7 @@ func (sr *StatsRepository) GetCountriesForSpeaker(id string) ([]*string, error) 
 func (sr *StatsRepository) GetPresentationsForSpeaker(id string) ([]*models.Presentation, error) {
 	var output []*models.Presentation
 	// Create read-only transaction
-	txn := sr.db.Txn(false)
+	txn := sr.sm.GetDB().Txn(false)
 	defer txn.Abort()
 
 	presentationRelations, err := txn.Get("presentationToSpeaker", "speakerID", id)
@@ -640,7 +644,7 @@ func (sr *StatsRepository) GetPresentationsForSpeaker(id string) ([]*models.Pres
 // ### Sponsor ###
 func (sr *StatsRepository) GetCompanyForSponsor(id string) (*models.Company, error) {
 	// Create read-only transaction
-	txn := sr.db.Txn(false)
+	txn := sr.sm.GetDB().Txn(false)
 	defer txn.Abort()
 
 	relations, err := txn.First("sponsorToCompany", "sponsorID", id)

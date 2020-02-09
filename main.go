@@ -21,6 +21,7 @@ var statsURL = flag.String("stats-url", "https://raw.githubusercontent.com/cloud
 var slackToken = flag.String("slack-token", "", "Slack token to produce invites")
 var slackURL = flag.String("slack-url", "https://cloud-native-nordics.slack.com", "URL to the slack community")
 var slackCommunity = flag.String("slack-community", "Cloud Native Nordics", "Name of the slack community")
+var refreshInterval = flag.Duration("refresh-interval", 5*time.Minute, "How often to refresh the underlying data")
 
 func main() {
 	flag.CommandLine.AddGoFlagSet(goflag.CommandLine)
@@ -44,9 +45,9 @@ func main() {
 	router.Use(middleware.Logger)
 	router.Use(middleware.Recoverer)
 
-	db := handlers.NewStatsManager(*statsURL)
+	sm := handlers.NewStatsManager(*statsURL, *refreshInterval)
 
-	statsRepo := repositories.NewStatsRepository(db)
+	statsRepo := repositories.NewStatsRepository(sm)
 	slackRepo := repositories.NewSlackRepository(*slackToken, *slackURL, *slackCommunity)
 
 	resolver := handlers.NewResolver(statsRepo, slackRepo)
