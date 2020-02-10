@@ -212,8 +212,14 @@ func (sm *StatsManager) generateSpeakers(output *unmarshalledData, speakers []mo
 
 func (sm *StatsManager) generateMeetupGroups(output *unmarshalledData, meetupGroups []models.MeetupGroupIn) {
 	for _, group := range meetupGroups {
+		// Avoid nil panics if the meetup group doesn't have a photo
+		photo := ""
+		if group.Photo != nil {
+			photo = *group.Photo
+		}
+
 		newMeetupGroup := &models.MeetupGroup{
-			Photo:       *group.Photo,
+			Photo:       photo,
 			Name:        *group.Name,
 			City:        *group.City,
 			Country:     *group.Country,
