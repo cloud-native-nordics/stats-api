@@ -45,7 +45,7 @@ func (sr *SlackRepository) DoInvite(email string) string {
 	if data["ok"] == false {
 		if data["error"].(string) == "already_invited" || data["error"].(string) == "already_in_team" {
 			return fmt.Sprintf("Success! You were already invited.<br>"+
-				"Visit <a href='https://%s'>%s</a>", sr.slackURL, sr.slackCommunity)
+				"Visit <a href='%s'>%s</a>", sr.slackURL, sr.slackCommunity)
 		} else if data["error"].(string) == "invalid_email" {
 			return "The email you entered is an invalid email."
 		} else if data["error"].(string) == "invalid_auth" {
